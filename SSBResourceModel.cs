@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Documents.Indexes;
@@ -31,6 +32,32 @@ namespace ssb_etl
                         Tags = new string[] { },
                         Properties = new[] {
                             new Property { Name = data["statistikkvariabel"], Value = new[] { data["01222: Befolkning og kvartalsvise endringar, etter region, kvartal og statistikkvariabel"] } }
+                        },
+                        Source = new[] { metadata.Value<string>("@id") }
+                    }
+                );
+
+                AddMap<SSB>(statistikker =>
+                    from statistikk in statistikker
+                    let metadata = MetadataFor(statistikk)
+                    where metadata.Value<string>("@id") == "SSB/26975"
+                    from data in statistikk.Data
+                    select new Resource
+                    {
+                        ResourceId = data["region"].Substring(2, 4),
+                        Type = new string[] { "Kommune" },
+                        SubType = new string [] { },
+                        Title = new[] { data["region"].Substring(7) },
+                        Code =  new[] { data["region"].Substring(2, 4) },
+                        Status = new string[] { },
+                        Tags = new string[] { },
+                        Properties = new[] {
+                            new Property {
+                                Name = data["statistikkvariabel"],
+                                Value = new[] { data["07459: Befolkning, etter region, år og statistikkvariabel"] },
+                                Tags = new[] { "@history" },
+                                Thru = new DateTime(int.Parse(data["år"]), 12, 31)
+                            }
                         },
                         Source = new[] { metadata.Value<string>("@id") }
                     }

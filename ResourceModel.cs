@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace ssb_etl
@@ -25,6 +26,8 @@ namespace ssb_etl
             public IEnumerable<string> Tags { get; set; }
             public IEnumerable<ResourceModel.Resource> Resources { get; set; }
             public IEnumerable<Property> Properties { get; set; }
+            public DateTime? From { get; set; }
+            public DateTime? Thru { get; set; }
             public IEnumerable<string> Source { get; set; }
         }
     }

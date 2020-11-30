@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
@@ -18,6 +18,17 @@ namespace ssb_etl
                 store.Initialize();
 
                 var stopwatch = Stopwatch.StartNew();
+
+                using (BulkInsertOperation bulkInsert = store.BulkInsert())
+                {
+                    bulkInsert.Store(
+                        new {
+                            Data = Csv.ExpandoStream(WebRequest.Create("https://data.ssb.no/api/v0/dataset/26975.csv"))
+                        },
+                        "SSB/26975",
+                        new MetadataAsDictionary(new Dictionary<string, object> {{ "@collection", "SSB"}})
+                    );
+                }
 
                 using (BulkInsertOperation bulkInsert = store.BulkInsert())
                 {
