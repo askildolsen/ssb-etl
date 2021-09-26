@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Raven.Client.Documents.Indexes;
-using static ssb_etl.ResourceModel;
-using static ssb_etl.ResourceModelUtils;
+using static Digitalisert.Dataplattform.ResourceModel;
+using static Digitalisert.Dataplattform.ResourceModelExtensions;
 
 namespace ssb_etl
 {
@@ -83,12 +83,8 @@ namespace ssb_etl
 
                 OutputReduceToCollection = "SSBResource";
 
-                AdditionalSources = new Dictionary<string, string>
-                {
-                    {
-                        "ResourceModelUtils",
-                        ReadResourceFile("ssb_etl.ResourceModelUtils.cs")
-                    }
+                AdditionalAssemblies = new HashSet<AdditionalAssembly> {
+                    AdditionalAssembly.FromPath("Digitalisert.Dataplattform.ResourceModel.dll", new HashSet<string> { "Digitalisert.Dataplattform" })
                 };
             }
         }
